@@ -8,19 +8,23 @@ import {
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Keyboard,
-  Image
+  Image,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { BlurView } from "expo-blur";
+import { Input } from "components/Input";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const [signupAs, setSignupAs] = useState<"renter" | "landlord" | undefined>(
+    undefined
+  );
   const handleLogin = () => {
     // TODO: Implement login logic
     console.log("Login attempted with:", { email, password });
   };
+  console.log(signupAs);
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -29,46 +33,40 @@ export default function LoginScreen() {
         <KeyboardAvoidingView behavior="padding" style={styles.formContainer}>
           <BlurView intensity={60} style={styles.blurContainer}>
             <View style={styles.titleContainer}>
-              <Image 
-                source={require('assets/images/house.png')}
+              <Image
+                source={require("assets/images/house.png")}
                 style={styles.titleIcon}
               />
               <Text style={styles.title}>roomly</Text>
             </View>
-            <Text style={styles.subtitle}>Sign in to continue</Text>
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={styles.input}
-                placeholder="Email"
-                placeholderTextColor="#A0A0A0"
-                value={email}
-                onChangeText={setEmail}
-                keyboardType="email-address"
-                autoCapitalize="none"
-                autoComplete="email"
-              />
-              <TextInput
-                style={styles.input}
-                placeholder="Password"
-                placeholderTextColor="#A0A0A0"
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry
-                autoCapitalize="none"
-              />
-            </View>
-            <TouchableOpacity style={styles.forgotPassword}>
-              <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-              <Text style={styles.loginButtonText}>Sign In</Text>
-            </TouchableOpacity>
-            <View style={styles.signupContainer}>
-              <Text style={styles.signupText}>Don't have an account? </Text>
-              <TouchableOpacity>
-                <Text style={styles.signupLink}>Sign Up</Text>
+            <Text style={styles.subtitle}>I am a...</Text>
+            <View style={styles.switchContainer}>
+              <TouchableOpacity
+                style={[
+                  styles.switchButton,
+                  signupAs === "renter" && styles.switchButtonActive,
+                ]}
+                onPress={() => setSignupAs("renter")}
+              >
+                <Text style={styles.switchButtonText}>Renter</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[
+                  styles.switchButton,
+                  signupAs === "landlord" && styles.switchButtonActive,
+                ]}
+                onPress={() => setSignupAs("landlord")}
+              >
+                <Text style={styles.switchButtonText}>Landlord</Text>
               </TouchableOpacity>
             </View>
+            {signupAs !== undefined && (
+              <View style={styles.inputContainer}>
+              <Input type="email" value={email} onChange={setEmail} />
+              <Input type="password" value={password} onChange={setPassword} />
+              <Input type="password" value={password} onChange={setPassword} />
+            </View>
+            )}
           </BlurView>
         </KeyboardAvoidingView>
       </View>
@@ -90,11 +88,11 @@ const styles = StyleSheet.create({
     padding: 30,
     borderRadius: 15,
     overflow: "hidden",
-    backgroundColor: "rgba(255, 255, 255, 0.1)",
+    backgroundColor: "#FFFFFF1A",
   },
   titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 16,
     gap: 12,
   },
@@ -112,7 +110,7 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: 16,
     color: "#A0A0A0",
-    marginBottom: 32,
+    marginBottom: 16,
     textAlign: "left",
   },
   inputContainer: {
@@ -120,7 +118,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   input: {
-    backgroundColor: "rgba(255, 255, 255, 0.1)",
+    backgroundColor: "#FFFFFF1A",
     padding: 16,
     borderRadius: 12,
     color: "#FFFFFF",
@@ -138,16 +136,24 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 24,
+    marginBottom: 16,
     gap: 16,
   },
   switchButton: {
-    backgroundColor: "#007AFF",
+    backgroundColor: "#FFFFFF1A",
     padding: 16,
     borderRadius: 12,
     alignItems: "center",
     marginBottom: 24,
     flex: 1,
+  },
+  switchButtonActive: {
+    backgroundColor: "#007AFF",
+  },
+  switchButtonText: {
+    color: "#FFFFFF",
+    fontSize: 16,
+    fontWeight: "600",
   },
   loginButton: {
     backgroundColor: "#834333",

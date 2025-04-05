@@ -8,11 +8,14 @@ import {
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Keyboard,
-  Image
+  Image,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { BlurView } from "expo-blur";
 import { router } from "expo-router";
+import { PrimaryButton } from "components/PrimaryButton";
+import { BACKGROUND, BLACK, PRIMARY, WHITE } from "constants/palette";
+import { Input } from "components/Input";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
@@ -30,44 +33,30 @@ export default function LoginScreen() {
         <KeyboardAvoidingView behavior="padding" style={styles.formContainer}>
           <BlurView intensity={60} style={styles.blurContainer}>
             <View style={styles.titleContainer}>
-              <Image 
-                source={require('assets/images/house.png')}
+              <Image
+                source={require("assets/images/house.png")}
                 style={styles.titleIcon}
               />
-              <Text style={styles.title}>roomly</Text>
+              <Text style={styles.title}>Roomly</Text>
             </View>
             <Text style={styles.subtitle}>Sign in to continue</Text>
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={styles.input}
-                placeholder="Email"
-                placeholderTextColor="#A0A0A0"
-                value={email}
-                onChangeText={setEmail}
-                keyboardType="email-address"
-                autoCapitalize="none"
-                autoComplete="email"
-              />
-              <TextInput
-                style={styles.input}
-                placeholder="Password"
-                placeholderTextColor="#A0A0A0"
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry
-                autoCapitalize="none"
-              />
+            <View style={styles.credentialsContainer}>
+              <Input type="email" value={email} onChange={setEmail} />
+              <Input type="password" value={password} onChange={setPassword} />
             </View>
             <TouchableOpacity style={styles.forgotPassword}>
               <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-              <Text style={styles.loginButtonText}>Sign In</Text>
-            </TouchableOpacity>
+            <PrimaryButton label="Sign In" onPress={handleLogin} />
             <View style={styles.signupContainer}>
               <Text style={styles.signupText}>Don't have an account? </Text>
               <TouchableOpacity>
-                <Text style={styles.signupLink} onPress={() => router.push('/signup')}>Sign Up</Text>
+                <Text
+                  style={styles.signupLink}
+                  onPress={() => router.push("/signup")}
+                >
+                  Sign Up
+                </Text>
               </TouchableOpacity>
             </View>
           </BlurView>
@@ -80,7 +69,7 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#1a1a1a",
+    backgroundColor: BACKGROUND,
   },
   formContainer: {
     flex: 1,
@@ -91,11 +80,11 @@ const styles = StyleSheet.create({
     padding: 30,
     borderRadius: 15,
     overflow: "hidden",
-    backgroundColor: "rgba(255, 255, 255, 0.1)",
+    backgroundColor: BLACK,
   },
   titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 16,
     gap: 12,
   },
@@ -116,17 +105,17 @@ const styles = StyleSheet.create({
     marginBottom: 32,
     textAlign: "left",
   },
-  inputContainer: {
+  credentialsContainer: {
     gap: 16,
     marginBottom: 16,
   },
-  input: {
-    backgroundColor: "rgba(255, 255, 255, 0.1)",
-    padding: 16,
-    borderRadius: 12,
-    color: "#FFFFFF",
-    fontSize: 16,
-  },
+  // input: {
+  //   backgroundColor: "rgba(255, 255, 255, 0.1)",
+  //   padding: 16,
+  //   borderRadius: 12,
+  //   color: "#FFFFFF",
+  //   fontSize: 16,
+  // },
   forgotPassword: {
     alignSelf: "flex-end",
     marginBottom: 24,
@@ -135,44 +124,18 @@ const styles = StyleSheet.create({
     color: "#A0A0A0",
     fontSize: 14,
   },
-  switchContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 24,
-    gap: 16,
-  },
-  switchButton: {
-    backgroundColor: "#007AFF",
-    padding: 16,
-    borderRadius: 12,
-    alignItems: "center",
-    marginBottom: 24,
-    flex: 1,
-  },
-  loginButton: {
-    backgroundColor: "#834333",
-    padding: 16,
-    borderRadius: 12,
-    alignItems: "center",
-    marginBottom: 24,
-  },
-  loginButtonText: {
-    color: "#FFFFFF",
-    fontSize: 16,
-    fontWeight: "600",
-  },
   signupContainer: {
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
+    marginTop: 12,
   },
   signupText: {
-    color: "#A0A0A0",
+    color: WHITE,
     fontSize: 14,
   },
   signupLink: {
-    color: "#007AFF",
+    color: PRIMARY,
     fontSize: 14,
     fontWeight: "600",
   },
