@@ -1,53 +1,66 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import {
   StyleSheet,
   Text,
   View,
-  TextInput,
   TouchableOpacity,
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Keyboard,
-  Image,
 } from "react-native";
-import { StatusBar } from "expo-status-bar";
 import { BlurView } from "expo-blur";
 import { router } from "expo-router";
 import { PrimaryButton } from "components/PrimaryButton";
+import { RoomlyHeader } from "components/RoomlyHeader";
 import { BACKGROUND, BLACK, PRIMARY, WHITE } from "constants/palette";
 import { Input } from "components/Input";
+import { useAuth } from "../context/auth";
+
+const shouldDisableLogin = (email: string, password: string) => {
+  return email === "" || password === "";
+};
 
 export default function LoginScreen() {
+  const { signIn } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = () => {
-    // TODO: Implement login logic
-    console.log("Login attempted with:", { email, password });
+  const disabled = useMemo(() => shouldDisableLogin(email, password), [email, password]);
+
+  const handleLogin = async () => {
+    try {
+      await signIn(email, password);
+    } catch (error) {
+      console.error("Login failed:", error);
+      // TODO: Show error message to user
+    }
   };
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
-        <StatusBar style="light" />
         <KeyboardAvoidingView behavior="padding" style={styles.formContainer}>
           <BlurView intensity={60} style={styles.blurContainer}>
-            <View style={styles.titleContainer}>
-              <Image
-                source={require("assets/images/house.png")}
-                style={styles.titleIcon}
-              />
-              <Text style={styles.title}>Roomly</Text>
-            </View>
+            <RoomlyHeader />
             <Text style={styles.subtitle}>Sign in to continue</Text>
             <View style={styles.credentialsContainer}>
-              <Input type="email" value={email} onChange={setEmail} />
-              <Input type="password" value={password} onChange={setPassword} />
+              <Input
+                type="email"
+                value={email}
+                placeholder="Email"
+                onChange={setEmail}
+              />
+              <Input
+                type="password"
+                value={password}
+                placeholder="Password"
+                onChange={setPassword}
+              />
             </View>
             <TouchableOpacity style={styles.forgotPassword}>
               <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
             </TouchableOpacity>
-            <PrimaryButton label="Sign In" onPress={handleLogin} />
+            <PrimaryButton label="Sign In" onPress={handleLogin} disabled={disabled} />
             <View style={styles.signupContainer}>
               <Text style={styles.signupText}>Don't have an account? </Text>
               <TouchableOpacity>
@@ -82,23 +95,6 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     backgroundColor: BLACK,
   },
-  titleContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 16,
-    gap: 12,
-  },
-  titleIcon: {
-    width: 40,
-    height: 40,
-    marginBottom: 8,
-  },
-  title: {
-    fontSize: 32,
-    fontWeight: "bold",
-    color: "#FFFFFF",
-    textAlign: "left",
-  },
   subtitle: {
     fontSize: 16,
     color: "#A0A0A0",
@@ -109,13 +105,6 @@ const styles = StyleSheet.create({
     gap: 16,
     marginBottom: 16,
   },
-  // input: {
-  //   backgroundColor: "rgba(255, 255, 255, 0.1)",
-  //   padding: 16,
-  //   borderRadius: 12,
-  //   color: "#FFFFFF",
-  //   fontSize: 16,
-  // },
   forgotPassword: {
     alignSelf: "flex-end",
     marginBottom: 24,
@@ -139,4 +128,4 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "600",
   },
-});
+}); 

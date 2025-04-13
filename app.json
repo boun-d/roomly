@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "expo-playground",
-    "slug": "expo-playground",
+    "name": "roomly-app",
+    "slug": "roomly-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -9,13 +9,8 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      }
+      "supportsTablet": true,
+      "bundleIdentifier": "com.anonymous.roomlyapp"
     },
     "web": {
       "bundler": "metro",
@@ -35,7 +30,8 @@
       ]
     ],
     "experiments": {
-      "typedRoutes": true
+      "typedRoutes": true,
+      "tsconfigPaths": true
     }
   }
 }
