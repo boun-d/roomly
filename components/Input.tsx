@@ -3,12 +3,12 @@ import { StyleSheet, TextInput } from "react-native";
 interface Props {
   type: "email" | "password";
   value: string;
+  placeholder: string;
   onChange: (text: string) => void;
 }
 
-export const Input: React.FC<Props> = ({ type, value, onChange }) => {
+export const Input: React.FC<Props> = ({ type, value, placeholder, onChange }) => {
   const keyboardType = type === "email" ? "email-address" : "default";
-  const placeholder = type === "email" ? "Email" : "Password";
   return (
     <TextInput
       style={styles.input}
