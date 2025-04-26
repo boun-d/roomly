@@ -1,16 +1,15 @@
-# Revised React Native Landlord-Renter App Architecture
+# Roomly App Architecture
 
-## Updated Tech Stack
+## Tech Stack
 - **Frontend**: React Native with Expo
-- **UI Framework**: React Native Paper
-- **State Management**: Redux Toolkit
+- **UI Framework**: Unistyles with stylesheets per component
+- **State Management**: Zustand
 - **Backend**: Supabase (PostgreSQL, Authentication, Storage, Functions)
 - **Payment Processing**: Stripe API
-- **Notifications**: OneSignal (integrates well with Supabase)
+- **Notifications**: OneSignal
 - **Navigation**: React Navigation
 
 ## Detailed Page Functionality & UI Elements
-
 ### Shared Pages
 
 #### 1. Authentication Pages
@@ -18,42 +17,55 @@
 - UI Elements:
   - Email/password input fields
   - "Forgot Password" link
-  - Social login buttons (Google, Apple)
-  - Toggle between landlord/renter login
-  - "Create Account" button
+  - ”Create Account” link
+  - ”Sign in” button
 - Functionality:
   - Secure authentication via Supabase Auth
   - JWT token management
   - Role-based redirection
+    - If landlord, direct to landlord dashboard
+    - If Tenant, direct to landlord dashboard
+    - If both, direct to landlord dashboard
   - Error handling with clear feedback
+    - Errors in red, no popups. Errors shown in input fields
 
 **Registration Screen**
 - UI Elements:
-  - Input fields (name, email, password, phone)
-  - Role selection (landlord/renter)
+  - Role selection (landlord/tenant)
+  - Input fields (name, email, mobile phone, password, confirm password)
   - Terms & conditions checkbox
   - "Already have an account?" link
+  - ”Sign up” button
 - Functionality:
   - User creation in Supabase
   - Validation checks
+    - Email can sign up as both landlord and tenant
+    - Email can’t sign up for landlord or tenant twice
   - Email verification triggering
   - Initial profile setup
 
 #### 2. Dashboard
 **Landlord Dashboard**
 - UI Elements:
-  - Property summary cards (images, address, occupancy)
+  - Property summary cards (images, address, number of occupants)
   - Financial overview chart (rent collected vs outstanding)
   - Maintenance request counter with urgency indicators
-  - Recent messages preview
-  - Quick action floating button (+ icon with menu)
+  - Unread messages overview
+    - Link to messages tab at top
+    - Clicking messages takes you to the mesages tab and to that chat
+    - Messages have an unread indiactor next to them
+  - Bottom navigation
+    - First tab: dashboard (current route)
+    - Second tab: properties
+    - Third tab: messages
+    - Fourth tab: Account settings
 - Functionality:
   - Real-time data sync with Supabase
   - Pull-to-refresh for latest updates
   - Interactive chart with period selection
   - Property filtering options
 
-**Renter Dashboard**
+**Tenant Dashboard**
 - UI Elements:
   - Property card with lease details
   - Rent payment status card with due date countdown
@@ -66,13 +78,14 @@
   - Status updates for maintenance requests
   - Notification center integration
 
-#### 3. Profile Page
+#### 3. Account settings page
 - UI Elements:
   - Profile photo with upload button
   - Personal information section
   - Contact preferences toggles
   - Notification settings
   - Password change section
+  - If account user is a tenant and a landlord, a toggle should be shown to switch between the two
   - Logout button
 - Functionality:
   - Image upload to Supabase Storage
@@ -82,6 +95,7 @@
 
 #### 4. Messages Page
 **Conversation List Screen**
+- Conversation can be group (name is house address), or individual (name is recipient name)
 - UI Elements:
   - Search bar for conversations
   - List of conversation previews with:
@@ -111,7 +125,6 @@
   - Push notifications for new messages
 
 ### Landlord-Specific Pages
-
 #### 1. Property Management
 **Property List Screen**
 - UI Elements:
@@ -150,6 +163,7 @@
   - Address form with validation
   - Property details fields
   - Unit configuration options
+  - Add/edit tenants list
   - Save/cancel buttons
 - Functionality:
   - Image upload to Supabase Storage
@@ -243,7 +257,7 @@
   - Announcement archiving
   - Analytics on engagement
 
-### Renter-Specific Pages
+### Tenant-Specific Pages
 
 #### 1. Rent Payment
 **Payment Dashboard**
@@ -354,4 +368,4 @@
   - Download for offline access
   - Version tracking for updated documents
 
-This architecture leverages Supabase's PostgreSQL database and real-time capabilities to create a responsive, feature-rich application for both landlords and renters. The UI focuses on intuitive navigation and clear presentation of information, while the backend ensures secure data handling and efficient communication between parties.
+This architecture leverages Supabase's PostgreSQL database and real-time capabilities to create a responsive, feature-rich application for both landlords and tenants. The UI focuses on intuitive navigation and clear presentation of information, while the backend ensures secure data handling and efficient communication between parties.
